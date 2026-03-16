@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>CreepyProject</title>
+	</head>
+	<body>
+		<!-- loading screen -->
+		<div id="loading-screen">
+			<img src="assets/img/logo.png" width="50%" />
+			<div class="progress-container">
+				<div class="progress-bar-fill" id="progress-bar"></div>
+			</div>
+			<!-- status screen (add dynamic from renderer.ts) -->
+		</div>
+
+		<!-- main content -->
+		<div id="main-content" style="display: none">
+			<!-- debug overlay -->
+			<div id="debug-overlay" style="display: none">
+				<p id="debug-fps">FPS: 0</p>
+				<p id="debug-app-mem" class="debug-line">Used RAM: ...</p>
+				<p id="debug-ram" class="debug-line">System RAM: ...</p>
+				<p id="debug-platform" class="debug-line">Platform: ...</p>
+				<p id="debug-cpu" class="debug-line">CPU: ...</p>
+			</div>
+
+			<img src="assets/img/logo.png" width="70%" />
+			<div style="margin-bottom: 60px"></div>
+
+			<div class="button-container">
+				<button class="main-btn" id="launch-btn">Launch Game</button>
+
+				<!-- id="select-version-label" need for change color after loading -->
+				<p class="r" id="select-version-label" style="margin: 8px 0 4px 0">Select version:</p>
+
+				<button class="main-btn" id="version-btn">—</button>
+				<div class="btn-row">
+					<button class="main-btn-small-disabled" id="update-btn">Update</button>
+					<button class="main-btn-small" id="github-btn">GitHub</button>
+				</div>
+				<button class="main-btn" style="margin-top: 15px" id="quit-btn">Quit</button>
+			</div>
+
+			<!-- launcher version -->
+			<div id="version-display" class="r bottom-left"></div>
+
+			<!-- Java status -->
+			<div id="java-status" class="r bottom-right">Checking Java...</div>
+		</div>
+
+		<script type="module" src="/src/renderer.ts"></script>
+	</body>
+</html>
