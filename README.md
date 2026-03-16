@@ -10,13 +10,13 @@ npm install
 npm run make
 ```
 ```cmd
-; DEV mode
+:: DEV mode
 npm run start
 ```
 # How to install
 Download latest versions at Releases, run .exe and wait for install
 # Dependencies
-Java 8 / 11is recommended to install</font>
+Java 8 / 11 is recommended to install</font>
 
 
 <img src="src/icon.ico" width="100px">
