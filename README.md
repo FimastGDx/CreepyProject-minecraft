@@ -19,5 +19,5 @@ Download latest versions at Releases, run .exe and wait for install
 Java 8 / 11 is recommended to install</font>
 
 
-<img src="src/icon.ico" width="100px">
+<img src="assets/img/icon.ico" width="100px">
 
