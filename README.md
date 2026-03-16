@@ -2,18 +2,21 @@
 Minecraft new creepy versions launcher, CreepyLauncher new fork
 
 # Build
-Requirement NodeJS latest LTS version.
-**Remove only for build java folder to protect against unwanted problems** and run to build:
+Required NodeJS 23.
 ```cmd
 npm install
 ```
 ```cmd
-npm run dist
+npm run make
+```
+```cmd
+; DEV mode
+npm run start
 ```
 # How to install
 Download latest versions at Releases, run .exe and wait for install
 # Dependencies
-Java 8 is recommended to install</font>
+Java 8 / 11is recommended to install</font>
 
 
 <img src="src/icon.ico" width="100px">
