@@ -1,0 +1,229 @@
+/*index.css*/
+@font-face {
+	font-family: "Fontm";
+	src: url("../assets/fonts/font.ttf") format("truetype");
+}
+* {
+	user-select: none;
+}
+
+.r {
+	color: #fff;
+	font-family: "Fontm", sans-serif;
+	text-align: left;
+	word-spacing: 5px;
+}
+.c {
+	color: #fff;
+	font-family: "Fontm", sans-serif;
+	text-align: center;
+	word-spacing: 5px;
+}
+
+.l {
+	color: #fff;
+	font-family: "Fontm", sans-serif;
+	text-align: right;
+	word-spacing: 5px;
+}
+
+body {
+	background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("../assets/img/dirt.png");
+	background-size: 64px 64px;
+	background-repeat: repeat;
+	image-rendering: pixelated;
+	text-align: center;
+	display: block;
+}
+
+.main-btn {
+	text-align: center;
+	display: block;
+	height: 35px;
+	font-family: "Fontm", sans-serif;
+	background: #727272;
+	color: rgb(247, 247, 247);
+	width: 30%; /*30percent*/
+	padding: 0.5rem 0;
+	margin-bottom: 0.75rem;
+	text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.8);
+	font-size: 1rem;
+	letter-spacing: 0.025em;
+	border: 2px solid rgba(0, 0, 0, 1);
+	box-shadow:
+		inset 3px 3px 0 rgba(255, 255, 255, 0.5),
+		inset -3px -3px 0 rgba(0, 0, 0, 0.5);
+	/*cursor: pointer;*/
+}
+
+.main-btn-small {
+	text-align: center;
+	display: block;
+	height: 35px;
+	font-family: "Fontm", sans-serif;
+	background: #727272;
+	color: rgb(247, 247, 247);
+	width: 155px; /*30percent*/
+	padding: 0.5rem 0;
+	margin-bottom: 0.75rem;
+	text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.8);
+	font-size: 1rem;
+	letter-spacing: 0.025em;
+	border: 2px solid rgba(0, 0, 0, 1);
+	box-shadow:
+		inset 3px 3px 0 rgba(255, 255, 255, 0.5),
+		inset -3px -3px 0 rgba(0, 0, 0, 0.5);
+	/*cursor: pointer;*/
+}
+
+.main-btn-disabled {
+	text-align: center;
+	display: block;
+	font-family: "Fontm", sans-serif;
+	background: #292929;
+	color: rgb(160, 158, 158);
+	width: 30%;
+	padding: 0.5rem 0;
+	margin-bottom: 0.75rem;
+	text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.8);
+	font-size: 1rem;
+	letter-spacing: 0.025em;
+	border: 2px solid rgba(0, 0, 0, 1);
+	box-shadow:
+		inset 3px 3px 0 rgba(107, 107, 107, 0.5),
+		inset -3px -3px 0 rgba(0, 0, 0, 0.5);
+}
+
+.main-btn-small-disabled {
+	text-align: center;
+	display: block;
+	font-family: "Fontm", sans-serif;
+	background: #292929;
+	color: rgb(160, 158, 158);
+	width: 155px;
+	padding: 0.5rem 0;
+	margin-bottom: 0.75rem;
+	text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.8);
+	font-size: 1rem;
+	letter-spacing: 0.025em;
+	border: 2px solid rgba(0, 0, 0, 1);
+	box-shadow:
+		inset 3px 3px 0 rgba(107, 107, 107, 0.5),
+		inset -3px -3px 0 rgba(0, 0, 0, 0.5);
+}
+.main-btn:hover {
+	background: rgba(115, 107, 221, 1);
+	color: rgb(246, 246, 44);
+}
+.main-btn:focus {
+	outline: none;
+}
+
+.main-btn-small:hover {
+	background: rgba(115, 107, 221, 1);
+	color: rgb(246, 246, 44);
+}
+.main-btn-small:focus {
+	outline: none;
+}
+
+.button.container {
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+/* ── Загрузочный экран ── */
+#loading-screen {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.progress-container {
+  width: 50%;
+  height: 22px;
+  background: #1a1a1a;
+  border: 2px solid #000;
+  box-shadow: inset 2px 2px 0 rgba(0,0,0,0.6);
+  margin-top: 24px;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: #6e6e6e;
+  box-shadow:
+    inset 3px 3px 0 rgba(255,255,255,0.3),
+    inset -3px -3px 0 rgba(0,0,0,0.4);
+  transition: width 0.05s linear;
+}
+
+/* ── button container ── */
+.button-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Update + GitHub on a single line */
+.btn-row {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 0.75rem;
+}
+
+.btn-row .main-btn-small,
+.btn-row .main-btn-small-disabled {
+  margin-bottom: 0;
+}
+
+/* debug overlay*/
+#debug-overlay {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  z-index: 999;
+  pointer-events: none;
+}
+
+#debug-overlay p {
+  color: #fff;
+  font-family: "Fontm", sans-serif;
+  margin: 0 0 2px 0;
+  text-align: left;
+  font-size: 0.8rem;
+  text-shadow: 1px 1px 0 rgba(0,0,0,1);
+}
+
+/* lower labels */
+.bottom-left {
+  position: fixed;
+  bottom: 8px;
+  left: 12px;
+  margin: 0;
+  font-size: 0.8rem;
+}
+
+.bottom-right {
+  position: fixed;
+  bottom: 8px;
+  right: 12px;
+  margin: 0;
+  font-size: 0.8rem;
+}
+#version-btn {
+  font-size: clamp(0.5rem, 1.5vw, 1rem);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-left: 8px;
+  padding-right: 8px;
+}
