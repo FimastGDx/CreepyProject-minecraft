@@ -1,7 +1,7 @@
 {
   "name": "creepyproject",
   "productName": "CreepyProject",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Minecraft creepy versions launcher",
   "main": ".vite/build/main.js",
   "private": true,
