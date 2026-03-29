@@ -14,8 +14,8 @@ export interface Config {
 
 const config: Config = {
   debug: false,
-  current_version: "v2.0.0",
-  current_version_code: 1,
+  current_version: "v2.1.0",
+  current_version_code: 2,
   versions: [
     { name: "1.7.20", id: "1.7.20", url: "s3://1.7.20.zip" },
     { name: "Alpha 1.2.3_03", id: "a1.2.3_03", url: "s3://a1.2.3_03.zip" },
