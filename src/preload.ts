@@ -45,14 +45,23 @@ contextBridge.exposeInMainWorld('electronAPI', {
     checkVersionInstalled: (versionId: string): Promise<boolean> =>
         ipcRenderer.invoke('check-version-installed', versionId),
 
+    listInstalledVersions: (): Promise<string[]> =>
+        ipcRenderer.invoke('list-installed-versions'),
+
+    deleteVersion: (versionId: string): Promise<{ ok: boolean; error?: string }> =>
+        ipcRenderer.invoke('delete-version', versionId),
+
     resolveUrl: (rawUrl: string): Promise<{ ok: boolean; url?: string; error?: string }> =>
         ipcRenderer.invoke('resolve-url', rawUrl),
 
     downloadVersion: (
         versionId: string,
         downloadUrl: string
-    ): Promise<{ ok: boolean; error?: string }> =>
+    ): Promise<{ ok: boolean; cancelled?: boolean; error?: string }> =>
         ipcRenderer.invoke('download-version', versionId, downloadUrl),
+
+    cancelDownload: (): Promise<{ ok: boolean; error?: string }> =>
+        ipcRenderer.invoke('cancel-download'),
 
     // game
     launchGame: (versionId: string): Promise<{ ok: boolean; error?: string }> =>

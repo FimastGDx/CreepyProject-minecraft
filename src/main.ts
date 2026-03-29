@@ -27,8 +27,12 @@ type IpcHandler = Promise<{
 let proxyUrl: string | null = null;
 let runningGame: ChildProcess | null = null;
 let mainWindow: BrowserWindow | null = null;
+let downloadController: AbortController | null = null;
 
 const PROXY_CREDS: string = config.proxy;
+
+// stall detection: if no bytes received for this long, abort
+const STALL_TIMEOUT_MS = 30_000;
 
 // version folder
 function getVersionsDir(): string {
@@ -122,6 +126,58 @@ ipcMain.handle('check-version-installed', (_e, versionId: string) => {
   return fs.existsSync(bootFile);
 });
 
+// list all installed versions (dirs that contain boot.yml)
+ipcMain.handle('list-installed-versions', (): string[] => {
+  const versionsDir = getVersionsDir();
+  if (!fs.existsSync(versionsDir)) return [];
+
+  try {
+    const entries = fs.readdirSync(versionsDir, { withFileTypes: true });
+    const installed: string[] = [];
+    for (const entry of entries) {
+      if (entry.isDirectory()) {
+        const bootFile = path.join(versionsDir, entry.name, 'boot.yml');
+        if (fs.existsSync(bootFile)) {
+          installed.push(entry.name);
+        }
+      }
+    }
+    return installed;
+  } catch {
+    return [];
+  }
+});
+
+// recursive delete — more reliable than fs.rmSync on Windows (avoids ENOTEMPTY)
+function rimraf(dirPath: string): void {
+  if (!fs.existsSync(dirPath)) return;
+  const entries = fs.readdirSync(dirPath, { withFileTypes: true });
+  for (const entry of entries) {
+    const fullPath = path.join(dirPath, entry.name);
+    if (entry.isDirectory()) {
+      rimraf(fullPath);
+    } else {
+      try { fs.chmodSync(fullPath, 0o666); } catch { /* ignore */ }
+      fs.unlinkSync(fullPath);
+    }
+  }
+  fs.rmdirSync(dirPath);
+}
+
+// delete installed version directory
+ipcMain.handle('delete-version', (_e, versionId: string) => {
+  const versionDir = path.join(getVersionsDir(), versionId);
+  if (!fs.existsSync(versionDir)) {
+    return { ok: false, error: 'Version directory not found' };
+  }
+  try {
+    rimraf(versionDir);
+    return { ok: true };
+  } catch (err: any) {
+    return { ok: false, error: err.message };
+  }
+});
+
 // check direct link (s3:// -> https://)
 ipcMain.handle('resolve-url', async (_e, rawUrl: string) => {
   if (rawUrl.startsWith('https://')) {
@@ -164,7 +220,17 @@ ipcMain.handle('resolve-url', async (_e, rawUrl: string) => {
   }
 });
 
-// download and unpack version
+// cancel active download
+ipcMain.handle('cancel-download', () => {
+  if (downloadController) {
+    downloadController.abort();
+    // downloadController is cleared in the finally block of download-version
+    return { ok: true };
+  }
+  return { ok: false, error: 'No active download' };
+});
+
+// download and unpack version (with stall detection + cancellation support)
 ipcMain.handle('download-version', async (
   event,
   versionId: string,
@@ -175,17 +241,44 @@ ipcMain.handle('download-version', async (
 
   const zipPath = path.join(versionsDir, `${versionId}.zip`);
 
+  // create a fresh controller for this download
+  const controller = new AbortController();
+  downloadController = controller;
+
+  let stalled = false;
+  let downloaded = 0;
+
   try {
-    const res = await apiFetch(downloadUrl, 0);
+    const fetchOptions: any = { signal: controller.signal };
+    if (proxyUrl) {
+      fetchOptions.agent = new HttpsProxyAgent(proxyUrl);
+    }
+
+    const res = await nodeFetch(downloadUrl, fetchOptions);
 
     if (!res.ok) {
       return { ok: false, error: `Download server returned HTTP ${res.status}: ${res.statusText}` };
     }
 
     const total = parseInt(res.headers.get('content-length') ?? '0', 10);
-    let downloaded = 0;
+    let lastBytes = 0;
+    let lastProgressTime = Date.now();
 
-    // check progress with stream
+    // stall detection: check every 3s if bytes are advancing
+    const stallInterval = setInterval(() => {
+      if (controller.signal.aborted) {
+        clearInterval(stallInterval);
+        return;
+      }
+      if (downloaded > lastBytes) {
+        lastBytes = downloaded;
+        lastProgressTime = Date.now();
+      } else if (downloaded > 0 && Date.now() - lastProgressTime > STALL_TIMEOUT_MS) {
+        stalled = true;
+        controller.abort();
+      }
+    }, 3000);
+
     const counter = new Transform({
       transform(chunk, _enc, cb) {
         downloaded += chunk.length;
@@ -201,12 +294,15 @@ ipcMain.handle('download-version', async (
 
     const dest = fs.createWriteStream(zipPath);
 
-    // pipeline: correct backpressure + wait full flush to a disk
-    await pipeline(
-      res.body as NodeJS.ReadableStream,
-      counter,
-      dest
-    );
+    try {
+      await pipeline(
+        res.body as NodeJS.ReadableStream,
+        counter,
+        dest
+      );
+    } finally {
+      clearInterval(stallInterval);
+    }
 
     // check ZIP signature (PK = 0x50 0x4B)
     const fd = fs.openSync(zipPath, 'r');
@@ -237,9 +333,27 @@ ipcMain.handle('download-version', async (
     event.sender.send('extract-status', { extracting: false });
 
     return { ok: true };
+
   } catch (err: any) {
-    if (fs.existsSync(zipPath)) fs.unlinkSync(zipPath);
+    // cleanup partial zip
+    if (fs.existsSync(zipPath)) {
+      try { fs.unlinkSync(zipPath); } catch { /* ignore */ }
+    }
+
+    // distinguish: user cancel vs stall vs real error
+    if (err.name === 'AbortError' || controller.signal.aborted) {
+      if (stalled) {
+        return {
+          ok: false,
+          error: 'Download stalled: no data received for 30 seconds. Please try again.'
+        };
+      }
+      return { ok: false, cancelled: true };
+    }
+
     return { ok: false, error: err.message };
+  } finally {
+    downloadController = null;
   }
 });
 
@@ -263,7 +377,6 @@ ipcMain.handle('launch-game', (_e, versionId: string) => {
   // variant 1: boot_script: | (YAML scalar-block)
   const blockMatch = bootContent.match(/boot_script:\s*\|\s*\r?\n([\s\S]+?)(?:\r?\n\S|$)/);
   if (blockMatch?.[1]) {
-    // Собираем все строки блока, убираем отступы и объединяем
     cmd = blockMatch[1]
       .split(/\r?\n/)
       .map(l => l.trim())
@@ -305,7 +418,7 @@ ipcMain.handle('launch-game', (_e, versionId: string) => {
 // check game status
 ipcMain.handle('is-game-running', () => runningGame !== null);
 
-// check java 8 or java 11 (add later)
+// check java 8 or java 11
 ipcMain.handle('check-java-8', (): Promise<boolean> => {
   return new Promise((resolve) => {
     exec('java -version', (_error, stdout, stderr) => {

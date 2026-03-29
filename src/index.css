@@ -19,7 +19,6 @@
 	text-align: center;
 	word-spacing: 5px;
 }
-
 .l {
 	color: #fff;
 	font-family: "Fontm", sans-serif;
@@ -36,6 +35,7 @@ body {
 	display: block;
 }
 
+/* ── Buttons ── */
 .main-btn {
 	text-align: center;
 	display: block;
@@ -43,7 +43,7 @@ body {
 	font-family: "Fontm", sans-serif;
 	background: #727272;
 	color: rgb(247, 247, 247);
-	width: 30%; /*30percent*/
+	width: 30%;
 	padding: 0.5rem 0;
 	margin-bottom: 0.75rem;
 	text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.8);
@@ -53,7 +53,6 @@ body {
 	box-shadow:
 		inset 3px 3px 0 rgba(255, 255, 255, 0.5),
 		inset -3px -3px 0 rgba(0, 0, 0, 0.5);
-	/*cursor: pointer;*/
 }
 
 .main-btn-small {
@@ -63,7 +62,7 @@ body {
 	font-family: "Fontm", sans-serif;
 	background: #727272;
 	color: rgb(247, 247, 247);
-	width: 155px; /*30percent*/
+	width: 155px;
 	padding: 0.5rem 0;
 	margin-bottom: 0.75rem;
 	text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.8);
@@ -73,7 +72,6 @@ body {
 	box-shadow:
 		inset 3px 3px 0 rgba(255, 255, 255, 0.5),
 		inset -3px -3px 0 rgba(0, 0, 0, 0.5);
-	/*cursor: pointer;*/
 }
 
 .main-btn-disabled {
@@ -111,6 +109,7 @@ body {
 		inset 3px 3px 0 rgba(107, 107, 107, 0.5),
 		inset -3px -3px 0 rgba(0, 0, 0, 0.5);
 }
+
 .main-btn:hover {
 	background: rgba(115, 107, 221, 1);
 	color: rgb(246, 246, 44);
@@ -134,96 +133,215 @@ body {
 	align-items: center;
 }
 
-/* ── Загрузочный экран ── */
+/* ── Loading screen ── */
 #loading-screen {
-  position: fixed;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  z-index: 100;
+	position: fixed;
+	inset: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	z-index: 100;
 }
 
 .progress-container {
-  width: 50%;
-  height: 22px;
-  background: #1a1a1a;
-  border: 2px solid #000;
-  box-shadow: inset 2px 2px 0 rgba(0,0,0,0.6);
-  margin-top: 24px;
+	width: 50%;
+	height: 22px;
+	background: #1a1a1a;
+	border: 2px solid #000;
+	box-shadow: inset 2px 2px 0 rgba(0, 0, 0, 0.6);
+	margin-top: 24px;
 }
 
 .progress-bar-fill {
-  height: 100%;
-  width: 0%;
-  background: #6e6e6e;
-  box-shadow:
-    inset 3px 3px 0 rgba(255,255,255,0.3),
-    inset -3px -3px 0 rgba(0,0,0,0.4);
-  transition: width 0.05s linear;
+	height: 100%;
+	width: 0%;
+	background: #6e6e6e;
+	box-shadow:
+		inset 3px 3px 0 rgba(255, 255, 255, 0.3),
+		inset -3px -3px 0 rgba(0, 0, 0, 0.4);
+	transition: width 0.05s linear;
 }
 
-/* ── button container ── */
+/* ── Button container (main menu) ── */
 .button-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 }
 
-/* Update + GitHub on a single line */
 .btn-row {
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-  justify-content: center;
-  margin-bottom: 0.75rem;
+	display: flex;
+	flex-direction: row;
+	gap: 10px;
+	justify-content: center;
+	margin-bottom: 0.75rem;
 }
 
 .btn-row .main-btn-small,
 .btn-row .main-btn-small-disabled {
-  margin-bottom: 0;
+	margin-bottom: 0;
 }
 
-/* debug overlay*/
+/* ── Debug overlay ── */
 #debug-overlay {
-  position: fixed;
-  top: 8px;
-  left: 8px;
-  z-index: 999;
-  pointer-events: none;
+	position: fixed;
+	top: 8px;
+	left: 8px;
+	z-index: 999;
+	pointer-events: none;
 }
 
 #debug-overlay p {
-  color: #fff;
-  font-family: "Fontm", sans-serif;
-  margin: 0 0 2px 0;
-  text-align: left;
-  font-size: 0.8rem;
-  text-shadow: 1px 1px 0 rgba(0,0,0,1);
+	color: #fff;
+	font-family: "Fontm", sans-serif;
+	margin: 0 0 2px 0;
+	text-align: left;
+	font-size: 0.8rem;
+	text-shadow: 1px 1px 0 rgba(0, 0, 0, 1);
 }
 
-/* lower labels */
+/* ── Lower labels ── */
 .bottom-left {
-  position: fixed;
-  bottom: 8px;
-  left: 12px;
-  margin: 0;
-  font-size: 0.8rem;
+	position: fixed;
+	bottom: 8px;
+	left: 12px;
+	margin: 0;
+	font-size: 0.8rem;
 }
 
 .bottom-right {
-  position: fixed;
-  bottom: 8px;
-  right: 12px;
-  margin: 0;
-  font-size: 0.8rem;
+	position: fixed;
+	bottom: 8px;
+	right: 12px;
+	margin: 0;
+	font-size: 0.8rem;
 }
+
 #version-btn {
-  font-size: clamp(0.5rem, 1.5vw, 1rem);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  padding-left: 8px;
-  padding-right: 8px;
+	font-size: clamp(0.5rem, 1.5vw, 1rem);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	padding-left: 8px;
+	padding-right: 8px;
+}
+
+/* ─────────────────────────────────────
+   Manage Versions page
+   ───────────────────────────────────── */
+#manage-versions-page {
+	position: fixed;
+	inset: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	z-index: 10;
+}
+
+.manage-page-inner {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 60%;
+	max-width: 620px;
+	/* fixed height keeps the page itself from scrolling */
+	height: 520px;
+}
+
+.manage-title {
+	font-size: 1.4rem;
+	margin: 0 0 4px 0;
+	text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.8);
+}
+
+.manage-subtitle {
+	font-size: 0.78rem;
+	opacity: 0.55;
+	margin: 0 0 14px 0;
+	word-spacing: normal;
+}
+
+/* ── Scrollable table wrapper ── */
+.versions-table-wrap {
+	width: 100%;
+	/* fixed height → only the list scrolls, not the page */
+	height: 360px;
+	overflow-y: auto;
+	background: rgba(0, 0, 0, 0.55);
+	border: 2px solid #000;
+	box-shadow:
+		inset 2px 2px 0 rgba(255, 255, 255, 0.06),
+		inset -2px -2px 0 rgba(0, 0, 0, 0.6);
+}
+
+/* custom scrollbar */
+.versions-table-wrap::-webkit-scrollbar {
+	width: 10px;
+}
+.versions-table-wrap::-webkit-scrollbar-track {
+	background: #111;
+}
+.versions-table-wrap::-webkit-scrollbar-thumb {
+	background: #555;
+	border: 1px solid #000;
+}
+.versions-table-wrap::-webkit-scrollbar-thumb:hover {
+	background: #727272;
+}
+
+/* ── Version rows ── */
+.version-row {
+	display: block;
+	width: 100%;
+	padding: 10px 16px;
+	box-sizing: border-box;
+	font-family: "Fontm", sans-serif;
+	font-size: 0.9rem;
+	color: #fff;
+	text-align: left;
+	word-spacing: normal;
+	text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.9);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+	cursor: default;
+	transition: background 0.08s;
+}
+
+.version-row:last-child {
+	border-bottom: none;
+}
+
+.version-row:hover {
+	background: rgba(255, 255, 255, 0.07);
+}
+
+/* selected — white outline */
+.version-row.selected {
+	background: rgba(255, 255, 255, 0.1);
+	outline: 2px solid rgba(255, 255, 255, 0.85);
+	outline-offset: -2px;
+}
+
+/* empty / loading state */
+.version-row-empty {
+	padding: 18px 16px;
+	font-family: "Fontm", sans-serif;
+	font-size: 0.85rem;
+	color: rgba(255, 255, 255, 0.45);
+	text-align: center;
+}
+
+/* ── Action buttons row (below table) ── */
+.manage-btn-row {
+	display: flex;
+	flex-direction: row;
+	gap: 10px;
+	margin-top: 14px;
+	justify-content: center;
+}
+
+.manage-btn-row .main-btn-small,
+.manage-btn-row .main-btn-small-disabled {
+	margin-bottom: 0;
 }
